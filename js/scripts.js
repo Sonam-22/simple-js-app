@@ -35,6 +35,15 @@ let pokemonList = [{
     type: ['water']
   }
 ]
-console.log(pokemonList);
 
-document.write(pokemonList);
+document.write("<div class='pokemon-container'>");
+for (let i = 0; i < pokemonList.length; i++) {
+  console.log(pokemonList[i]);
+  //This handles heights greater than or equal to 2
+  if (pokemonList[i].height >= 2) {
+    document.write(` ${pokemonList[i].name} (height: ${pokemonList[i].height}) - Wow, that’s big!<br> `);
+  } else {
+    document.write(` ${pokemonList[i].name} (height: ${pokemonList[i].height})<br>`);
+  }
+}
+document.write("</div>");

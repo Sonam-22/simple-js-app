@@ -1,0 +1,36 @@
+:root {
+  --header-color: #000000;
+  --background-color: #749f8d;
+  --primary-color: #000000;
+  --primary-font: 'Mochiy Pop P One', sans-serif;
+  --font-size-body: 24px;
+  --font-weight-light: 400;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--primary-font);
+  font-weight: var(--font-weight-light);
+  font-size: var(--font-size-body);
+  line-height: 1.6;
+  color: var(--primary-color);
+  background-color: var(--background-color);
+}
+
+main {
+  margin: 20px;
+}
+
+.page-header {
+  display: flex;
+  width: 100%;
+  background-color: var(--header-color);
+}
+
+.pokemon-container {
+  display: flex;
+  justify-content: center;
+}

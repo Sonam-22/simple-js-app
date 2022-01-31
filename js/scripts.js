@@ -39,7 +39,20 @@ let pokemonRepository = (function() {
   ];
 
   function add(pokemon) {
-    pokemonList.push(pokemon);
+    let keys = Object.keys(pokemon);
+    if (typeof pokemon === 'object' && !Array.isArray(pokemon)) {
+      //validating Object.keys() to equal expected keys
+      if (keys[0] === 'name' &&
+        keys[1] === 'height' &&
+        keys[2] === 'type') {
+        pokemonList.push(pokemon);
+      }
+    }
+  }
+// function that allows to find specific Pokémon only by name
+  function filteredPokemon(searchName) {
+    return pokemonList.filter(pokemon => pokemon.name === searchName);
+
   }
 
   function getAll() {
@@ -47,10 +60,23 @@ let pokemonRepository = (function() {
   }
   return {
     add: add,
-    getAll: getAll
+    getAll: getAll,
+    filteredPokemon: filteredPokemon
   };
 })();
 console.log(pokemonRepository.getAll());
+
+
+pokemonRepository.add({
+  // name: 'New Pokemon',
+  // type: ['water']
+  name: 'Squirtle',
+  height: 0.5,
+  type: ['water']
+
+})
+
+console.log(pokemonRepository.filteredPokemon('Squirtle'));
 
 document.write("<div class='pokemon-container'>");
 // forEach()

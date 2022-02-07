@@ -49,7 +49,7 @@ let pokemonRepository = (function() {
       }
     }
   }
-// function that allows to find specific Pokémon only by name
+  // function that allows to find specific Pokémon only by name
   function filteredPokemon(searchName) {
     return pokemonList.filter(pokemon => pokemon.name === searchName);
 
@@ -58,34 +58,48 @@ let pokemonRepository = (function() {
   function getAll() {
     return pokemonList;
   }
+  // created function to add, within the pokemon-list ul, list items with buttons holding a Pokemon's name as its inner text.
+  function addListItem(pokemon) {
+
+    let pokemonList = document.querySelector('.pokemon-list');
+    let listpokemon = document.createElement('li');
+    let button = document.createElement('button');
+    button.innerText = pokemon.name;
+    button.classList.add('pokemon-button');
+    listpokemon.appendChild(button);
+    pokemonList.appendChild(listpokemon);
+    // added event listener to all pokemon buttons, to show pokemon details on 'click' event.
+    button.addEventListener('click', function() {
+      showDetails(pokemon);
+    });
+  }
+  // function to show details of the pokemon on the button 'click' event, called above within addListItem function
+  function showDetails(pokemon) {
+    console.log(pokemon.name);
+  }
+
+
   return {
     add: add,
     getAll: getAll,
-    filteredPokemon: filteredPokemon
+    filteredPokemon: filteredPokemon,
+    addListItem: addListItem,
+    showDetails: showDetails
   };
 })();
 console.log(pokemonRepository.getAll());
 
 
 pokemonRepository.add({
-  // name: 'New Pokemon',
-  // type: ['water']
+
   name: 'Squirtle',
   height: 0.5,
   type: ['water']
 
-})
+});
 
 console.log(pokemonRepository.filteredPokemon('Squirtle'));
 
-document.write("<div class='pokemon-container'>");
+
 // forEach()
-pokemonRepository.getAll().forEach(function(pokemon) {
-  //This handles heights greater than or equal to 2
-  if (pokemon.height >= 2) {
-    document.write(` ${pokemon.name} (height: ${pokemon.height}) - Wow, that’s big!<br> `);
-  } else {
-    document.write(` ${pokemon.name} (height: ${pokemon.height})<br>`);
-  }
-});
-document.write("</div>");
+pokemonRepository.getAll().forEach(pokemonRepository.addListItem);

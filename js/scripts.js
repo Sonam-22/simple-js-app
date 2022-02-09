@@ -1,52 +1,17 @@
 // IIFE
 let pokemonRepository = (function() {
-  let pokemonList = [{
-      name: 'Bulbasaur',
-      height: 0.7,
-      type: ['grass', 'poison']
-    },
-    {
-      name: 'Ivysaur',
-      height: 1,
-      type: ['grass', 'poison']
-    },
-    {
-      name: 'Venusaur',
-      height: 2,
-      type: ['grass', 'poison']
-    },
-    {
-      name: 'Charmander ',
-      height: 0.6,
-      type: ['fire']
-    },
-    {
-      name: 'Charmeleon',
-      height: 1.1,
-      type: ['fire']
-    },
-    {
-      name: 'Charizard',
-      height: 1.7,
-      type: ['fire', 'flying']
-    },
-    {
+  let pokemonList = [];
+  let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=50';
 
-      name: 'Squirtle',
-      height: 0.5,
-      type: ['water']
-    }
-  ];
 
   function add(pokemon) {
-    let keys = Object.keys(pokemon);
-    if (typeof pokemon === 'object' && !Array.isArray(pokemon)) {
-      //validating Object.keys() to equal expected keys
-      if (keys[0] === 'name' &&
-        keys[1] === 'height' &&
-        keys[2] === 'type') {
-        pokemonList.push(pokemon);
-      }
+    if (
+      typeof pokemon === "object" &&
+      "name" in pokemon
+    ) {
+      pokemonList.push(pokemon);
+    } else {
+      console.log("pokemon is not correct");
     }
   }
   // function that allows to find specific Pokémon only by name
@@ -73,9 +38,43 @@ let pokemonRepository = (function() {
       showDetails(pokemon);
     });
   }
+
+  // function to load list of pokemon from apiUrl, stores name & detailsUrl in pokemonList via add()
+  function loadList() {
+    return fetch(apiUrl).then(function(response) {
+      return response.json();
+    }).then(function(json) {
+      json.results.forEach(function(item) {
+        let pokemon = {
+          name: item.name,
+          detailsUrl: item.url
+        };
+        add(pokemon);
+      });
+    }).catch(function(e) {
+      console.error(e);
+    })
+  }
+  // function to load further details about pokemon (items) in the pokemonList: image, height & types
+  function loadDetails(item) {
+    let url = item.detailsUrl;
+    return fetch(url).then(function(response) {
+      return response.json();
+    }).then(function(details) {
+      // Now we add the details to the item
+      item.imageUrl = details.sprites.front_default;
+      item.height = details.height;
+      item.types = details.types;
+    }).catch(function(e) {
+      console.error(e);
+    });
+
+  }
   // function to show details of the pokemon on the button 'click' event, called above within addListItem function
-  function showDetails(pokemon) {
-    console.log(pokemon.name);
+  function showDetails(item) {
+    loadDetails(item).then(function() {
+      console.log(item);
+    });
   }
 
 
@@ -84,22 +83,16 @@ let pokemonRepository = (function() {
     getAll: getAll,
     filteredPokemon: filteredPokemon,
     addListItem: addListItem,
+    loadList: loadList,
+    loadDetails: loadDetails,
     showDetails: showDetails
   };
 })();
 console.log(pokemonRepository.getAll());
 
-
-pokemonRepository.add({
-
-  name: 'Squirtle',
-  height: 0.5,
-  type: ['water']
-
-});
-
 console.log(pokemonRepository.filteredPokemon('Squirtle'));
 
-
-// forEach()
-pokemonRepository.getAll().forEach(pokemonRepository.addListItem);
+pokemonRepository.loadList().then(function() {
+  // forEach()
+  pokemonRepository.getAll().forEach(pokemonRepository.addListItem);
+});

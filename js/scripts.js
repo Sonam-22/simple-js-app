@@ -21,7 +21,7 @@ let pokemonRepository = (function() {
       return pokemonList;
     }
     // Return the  pokemons whose name contain the searc term.
-    return pokemonList.filter(pokemon => pokemon.name.includes(searchName));
+    return pokemonList.filter(pokemon => pokemon.name.toLowerCase().includes(searchName.toLowerCase()));
   }
 
   function loadFilteredPokemonList() {

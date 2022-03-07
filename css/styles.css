@@ -12,7 +12,7 @@ body {
   font-weight: var(--font-weight-light);
   font-size: var(--font-size-body);
   line-height: 1.6;
-  background: linear-gradient(50deg, #ffab00, #fff800) !important;
+  background: linear-gradient(50deg, #ffab00, #fff800);
 }
 
 main {
